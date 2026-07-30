@@ -1,9 +1,9 @@
 ---
-name: legal-checklist
-description: BTS-Synthetic legal review checklist for inbound RFPs and contracts. Use whenever reviewing an RFP for contractual risk — covers data residency, liability, IP, audit, termination, and our standard counter-positions. Trigger on any request to legal-review, flag, redline, or assess contractual terms in an RFP or customer document.
+name: risk-checklist
+description: BTS-Synthetic regulatory and contractual risk checklist for inbound RFPs. Covers data residency, liability, IP, audit, termination, and sector-specific regulatory patterns (financial services, healthcare). Use whenever screening an RFP for contractual or regulatory risk. Trigger on any request to risk-review, flag, redline, or assess contractual/regulatory terms in an RFP or customer document.
 ---
 
-# Legal Review Checklist
+# Risk Checklist
 
 For each item below, compare the RFP language against our standard position. Flag deviations with severity (blocker / negotiable / acceptable).
 
@@ -95,6 +95,24 @@ For each item below, compare the RFP language against our standard position. Fla
 - Higher coverage demanded → check with insurance broker; usually achievable for fee
 - Customer named as additional insured → acceptable
 - Customer demands proof of insurance for subprocessors → blocker
+
+## 11. Financial services patterns
+
+**Our standard:** We are not a bank or broker-dealer; we do not accept obligations that require us to hold a financial services license (e.g., acting as a fiduciary over customer funds, custody of financial instruments).
+
+**Common deviations:**
+- RFP requires SOC 1 Type II (not just SOC 2) because customer is itself regulated → negotiable, check with compliance before committing to a timeline
+- RFP requires PCI-DSS scope because payment card data flows through the platform → blocker unless PCI-DSS certification already exists for the deployment target; do not promise a certification timeline without compliance sign-off
+- RFP requires model risk management documentation (SR 11-7 style) for any ML/predictive component → negotiable, we can provide model documentation but not a formal model risk attestation
+
+## 12. Healthcare patterns
+
+**Our standard:** We are HIPAA-eligible (BAA available) but not a covered entity. We do not accept obligations beyond what a Business Associate Agreement covers.
+
+**Common deviations:**
+- RFP requires a signed BAA → acceptable, standard offering
+- RFP requires FDA-regulated software validation (e.g., treating the platform as part of a medical device data pipeline) → blocker, our platform is not validated as a medical device component
+- RFP requires HITRUST certification specifically (not just HIPAA-aligned controls) → negotiable, check current certification status before committing
 
 ## How to flag
 
