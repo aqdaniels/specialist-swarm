@@ -1,0 +1,100 @@
+{
+  "requirements": [
+    {
+      "requirement_id": "R1",
+      "text": "The platform must support real-time ingest from ~40,000 IoT devices in the field, peak 80,000 events/second.",
+      "section": "2.1 Workloads / 2.2 Scale",
+      "mandatory": true,
+      "motion": "build",
+      "motion_confidence": "high"
+    },
+    {
+      "requirement_id": "R2",
+      "text": "Native Power BI integration is non-negotiable — 600 users today.",
+      "section": "2.3 Capabilities",
+      "mandatory": true,
+      "motion": "build",
+      "motion_confidence": "high"
+    },
+    {
+      "requirement_id": "R3",
+      "text": "Data residency: EU customer data must remain in EU, multi-region deployment primary EU secondary US East.",
+      "section": "2.3 Capabilities",
+      "mandatory": true,
+      "motion": "build",
+      "motion_confidence": "high"
+    },
+    {
+      "requirement_id": "R4",
+      "text": "Machine learning pipelines for predictive maintenance (planned, not active).",
+      "section": "2.1 Workloads",
+      "mandatory": false,
+      "motion": "consulting",
+      "motion_confidence": "medium"
+    },
+    {
+      "requirement_id": "R5",
+      "text": "We are seeking a 3-year initial term with a 2-year renewal option, pricing for the full 5-year horizon fixed at signature with no escalators.",
+      "section": "3.1 Term",
+      "mandatory": true,
+      "motion": "run",
+      "motion_confidence": "medium"
+    },
+    {
+      "requirement_id": "R6",
+      "text": "Vendor must commit to 99.99% monthly uptime. SLA failures of any duration entitle Acme to terminate immediately with full refund of fees paid in the affected month.",
+      "section": "4.3 Service Levels",
+      "mandatory": true,
+      "motion": "run",
+      "motion_confidence": "high"
+    },
+    {
+      "requirement_id": "R7",
+      "text": "Acme reserves the right to audit vendor's controls, facilities, and personnel without prior notice, up to four times per calendar year, at vendor's cost.",
+      "section": "4.2 Audit",
+      "mandatory": true,
+      "motion": "risk_compliance",
+      "motion_confidence": "high"
+    },
+    {
+      "requirement_id": "R8",
+      "text": "Vendor liability for any data breach is uncapped; vendor must indemnify Acme for all costs including regulatory fines and reputational damages.",
+      "section": "4.1 Liability",
+      "mandatory": true,
+      "motion": "risk_compliance",
+      "motion_confidence": "high"
+    },
+    {
+      "requirement_id": "R9",
+      "text": "All work product, including custom development, configurations, and integrations, shall vest in Acme Corp upon creation.",
+      "section": "4.4 IP",
+      "mandatory": true,
+      "motion": "risk_compliance",
+      "motion_confidence": "high"
+    },
+    {
+      "requirement_id": "R10",
+      "text": "Vendor shall obtain Acme's prior written consent, withholdable at Acme's sole discretion, before engaging any subprocessor.",
+      "section": "4.5 Subprocessors",
+      "mandatory": true,
+      "motion": "risk_compliance",
+      "motion_confidence": "high"
+    },
+    {
+      "requirement_id": "R11",
+      "text": "The successful vendor must offer no less than 35% off published list pricing. Annual fees billed in advance, due Net 90.",
+      "section": "3.2 Payment / 3.3 Discount",
+      "mandatory": true,
+      "motion": "commercial",
+      "motion_confidence": "high"
+    },
+    {
+      "requirement_id": "R12",
+      "text": "Vendor must warrant that pricing offered to Acme is no less favourable than pricing offered to any comparable customer for the duration of the contract (Most Favoured Nation).",
+      "section": "3.4 Most Favoured Nation",
+      "mandatory": true,
+      "motion": "commercial",
+      "motion_confidence": "high"
+    }
+  ]
+}
