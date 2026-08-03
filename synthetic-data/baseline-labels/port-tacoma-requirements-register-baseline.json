@@ -1,0 +1,259 @@
+{
+  "_meta": {
+    "status": "SYNTHETIC — generated stand-in, not a real human-analyst baseline",
+    "purpose": "Ground truth for AC #2 (>=85% classification agreement check) against the coordinator's own requirements register for the same RFP.",
+    "source_rfp": "synthetic-data/staged-rfps/port-tacoma-maximo-cloud-migration-support-rfp.pdf",
+    "generated_by": "Claude, acting as a stand-in human labeler since no real human-produced baseline was available",
+    "how_to_replace": "If a real analyst labels this RFP later, swap this file out wholesale and keep the same schema so the AC #2 comparison script doesn't need to change.",
+    "labeling_notes": "Confidence is 'medium' wherever a requirement plausibly touches more than one motion (noted in `overlap_notes`) — a real labeler would resolve these with judgment call, not just pick the highest-frequency word match. That ambiguity is itself useful for testing whether the coordinator's classifier is honest about uncertainty rather than falsely confident."
+  },
+  "requirements": [
+    {
+      "requirement_id": "REQ-001",
+      "text": "Migrating our on-premises IBM Maximo instance to our Azure cloud tenant in Q2-Q3 2022.",
+      "section": "A. Background",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-002",
+      "text": "Providing routine administration, patching, minor upgrade, and support services for our Maximo instance in that cloud environment for a monthly fixed managed services fee.",
+      "section": "A. Background",
+      "mandatory": true,
+      "motion": "Run",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-003",
+      "text": "This contract will be valid for three (3) years with a not-to-exceed value of $200,000. The contract may be extended by one (1) additional year and amount increased at the Port's discretion.",
+      "section": "A. Background",
+      "mandatory": true,
+      "motion": "Commercial",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-004",
+      "text": "Anticipated fixed-price not-to-exceed project cost between $25,000 and $75,000 for the migration project.",
+      "section": "A. Background",
+      "mandatory": true,
+      "motion": "Commercial",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-005",
+      "text": "Anticipated monthly costs for managed services to range from $3,000 - $6,000 per month depending on scope/hours cap.",
+      "section": "A. Background",
+      "mandatory": true,
+      "motion": "Commercial",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-006",
+      "text": "Consulting services for planning the project tasks, deliverables, and timeline for migrating our Maximo instance to the Port's Azure cloud tenant.",
+      "section": "B. Scope of Services",
+      "mandatory": true,
+      "motion": "Consulting",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-007",
+      "text": "Consulting services for Azure deployment architecture to help the Port plan and size the VMs and Services the Port should provision with Microsoft in our existing Azure tenant.",
+      "section": "B. Scope of Services",
+      "mandatory": true,
+      "motion": "Consulting",
+      "confidence": "medium",
+      "overlap_notes": "Deployment architecture sizing is advisory framing (Consulting) but feeds directly into Build execution — a classifier that tags this Build instead is defensible, not wrong."
+    },
+    {
+      "requirement_id": "REQ-008",
+      "text": "Services to perform installation, configuration, data migration, testing, technical documentation, and go-live support to move our on-premises Maximo instance to the Port's Azure cloud tenant with minimal disruption to our users.",
+      "section": "B. Scope of Services",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-009",
+      "text": "Future project-based work (fixed-price or time-and-materials): introduction of a mobile solution, integration with Esri GIS, HSE capabilities, custom BIRT reports, integration with financial systems, configuring or customizing Maximo application UI and workflows.",
+      "section": "B. Scope of Services",
+      "mandatory": false,
+      "motion": "Build",
+      "confidence": "medium",
+      "overlap_notes": "Optional/future scope, not part of the priced initial project — mandatory=false is deliberate."
+    },
+    {
+      "requirement_id": "REQ-010",
+      "text": "Routine Maximo administration, maintenance, patching, minor version upgrade, and support services for our Maximo instance in the Azure cloud environment for a fixed monthly fee.",
+      "section": "B. Scope of Services",
+      "mandatory": true,
+      "motion": "Run",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-011",
+      "text": "Identify the proposed team (working titles, degrees, certifications, licenses), demonstrate the team's experience performing the requested services.",
+      "section": "D.1 Project-Based Support Services",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "medium",
+      "overlap_notes": "Team-quals requirement doesn't map cleanly to one motion; labeled against the migration project since it's scored under 'Project-Based Support Services.'"
+    },
+    {
+      "requirement_id": "REQ-012",
+      "text": "Describe your firm's IBM Maximo qualifications, including partner level, certifications, and experience performing Maximo project-based support, enhancement, customization, and consulting work.",
+      "section": "D.1 Project-Based Support Services",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "medium",
+      "overlap_notes": "Explicitly mixes 'consulting work' language with build/customization work — a Consulting tag would also be defensible."
+    },
+    {
+      "requirement_id": "REQ-013",
+      "text": "Describe your firm's Microsoft Azure experience and qualifications, including experience performing migration of on-premises Maximo instances to an Azure cloud environment.",
+      "section": "D.1 Project-Based Support Services",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-014",
+      "text": "Complete the Vendor Cybersecurity Self-Assessment spreadsheet referenced in Attachment E and return it by email with your proposal submission.",
+      "section": "D.1 Project-Based Support Services",
+      "mandatory": true,
+      "motion": "Risk",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-015",
+      "text": "Describe your firm's typical project approach and describe the typical deliverables and documentation you produce as part of a Maximo project (requirements, design documents, knowledge transfer documents, project plans, test plans, etc.).",
+      "section": "D.1 Project-Based Support Services",
+      "mandatory": true,
+      "motion": "Consulting",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-016",
+      "text": "Describe the Azure deployment architecture (VMs and Services) you would recommend the Port to provision in its Azure tenant to support this project.",
+      "section": "D.1 Project-Based Support Services",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-017",
+      "text": "Identify anticipated deliverables and give a timeline / project plan with key milestones and tasks for your team and the Port's team.",
+      "section": "D.1 Project-Based Support Services",
+      "mandatory": true,
+      "motion": "Consulting",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-018",
+      "text": "Describe your firm's experience providing routine administration, patching, minor upgrade, and support services for Maximo.",
+      "section": "D.2 Managed Support Services",
+      "mandatory": true,
+      "motion": "Run",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-019",
+      "text": "Include your standard Managed Services Agreement (MSA) and/or Service Level Agreement (SLA), with response and resolution times by severity, standard vs. off-hours support, and standard support hours.",
+      "section": "D.2 Managed Support Services",
+      "mandatory": true,
+      "motion": "Run",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-020",
+      "text": "Is there a cap/maximum for the number of hours that would be included for the fixed monthly fee?",
+      "section": "D.2 Managed Support Services",
+      "mandatory": true,
+      "motion": "Run",
+      "confidence": "medium",
+      "overlap_notes": "Directly shapes the commercial model for the managed services fee — Commercial is a defensible alternate tag."
+    },
+    {
+      "requirement_id": "REQ-021",
+      "text": "Present detailed information on the firm's proposed hourly rates for performing time-and-materials project-based support services using the table in Attachment D.",
+      "section": "D.3 Compensation",
+      "mandatory": true,
+      "motion": "Commercial",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-022",
+      "text": "Present detailed information on the firm's proposed monthly fee for providing routine Maximo administration, patching, minor upgrade, and support (managed services).",
+      "section": "D.3 Compensation",
+      "mandatory": true,
+      "motion": "Commercial",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-023",
+      "text": "All costs/fees quoted shall be fixed, fully burdened (including administrative overhead and all direct/indirect expenses), quoted in US Dollars, and inclusive of sales tax and other government fees, taxes, and charges.",
+      "section": "D.3 Compensation",
+      "mandatory": true,
+      "motion": "Commercial",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-024",
+      "text": "Consultant shall procure and maintain commercial general, IT Professional or Cyber Liability, and automobile liability insurance protecting against claims for bodily injury, property damage, and cyber-related risks (theft, loss or misuse of data, network breach, loss of IT systems control).",
+      "section": "Attachment B, Term 11 (Insurance)",
+      "mandatory": true,
+      "motion": "Risk",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-025",
+      "text": "Consultant and its subconsultants agree to defend, indemnify and hold harmless the Port of Tacoma from claims arising from the Consultant's negligent acts, errors, or omissions, including cyber-related risk.",
+      "section": "Attachment B, Term 11 (Insurance)",
+      "mandatory": true,
+      "motion": "Risk",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-026",
+      "text": "The Port of Tacoma is a public entity and must maintain access to, and be able to provide, records per RCW 40.14, RCW 42.56 and the Secretary of State's Local Government Common Records Retention Schedule; Consultant must maintain accurate records for six years post-term.",
+      "section": "Attachment B, Term 5 (Records)",
+      "mandatory": true,
+      "motion": "Risk",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-027",
+      "text": "Must continue using SQL Server DB after migration to cloud (DB service or DB server on VM in Azure). DB must be encrypted.",
+      "section": "Attachment C (Current Environment)",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "high"
+    },
+    {
+      "requirement_id": "REQ-028",
+      "text": "Required Recovery Time Objective (RTO): 8 hours in the cloud environment for the Production environment.",
+      "section": "Attachment C (Current Environment)",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "medium",
+      "overlap_notes": "Disaster-recovery posture is also a Risk & Compliance concern; labeled Build here since it's a technical architecture spec, not a contractual/regulatory one."
+    },
+    {
+      "requirement_id": "REQ-029",
+      "text": "Required Recovery Point Objective (RPO): 12 hours (amount of data which could be lost).",
+      "section": "Attachment C (Current Environment)",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "medium",
+      "overlap_notes": "Same DR/Risk overlap as REQ-028."
+    },
+    {
+      "requirement_id": "REQ-030",
+      "text": "Microsoft Azure AD integration is used for authentication and must continue to be supported post-migration.",
+      "section": "Attachment C (Current Environment)",
+      "mandatory": true,
+      "motion": "Build",
+      "confidence": "high"
+    }
+  ]
+}

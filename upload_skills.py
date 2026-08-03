@@ -16,13 +16,19 @@ from pathlib import Path
 
 from anthropic import Anthropic
 from anthropic.lib import files_from_dir
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Map skill directory name → specialist key that should get it
 SKILL_TO_SPECIALIST = {
-    "pricing-playbook": "pricing",
-    "legal-checklist":  "legal",
-    "competitive-intel": "competitive",
+    "offering-catalog-build": "build",
+    "offering-catalog-run": "run",
+    "offering-catalog-consulting": "consulting",
+    "commercial-playbook": "commercial",
+    "risk-checklist": "risk_compliance",
+    "solution-review": "critic",
 }
 
 
@@ -53,6 +59,14 @@ def main() -> None:
             print(f"  Skipping {skill_name} — no SKILL.md found")
             continue
 
+        # The critic is created by stretch_critic_subagent.py, which runs
+        # after this script in the documented flow — its ID won't exist yet
+        # on a first pass. Skip and let a second run (after the critic
+        # exists) pick it up; already-uploaded skills are reused by title.
+        if specialist_key not in specialist_ids:
+            print(f"  Skipping {skill_name} — no agent for '{specialist_key}' yet, re-run after it's created")
+            continue
+
         display_title = skill_name.replace("-", " ").title()
 
         # 1. Upload the skill (or reuse if one already exists with this title)
@@ -77,10 +91,10 @@ def main() -> None:
         current = client.beta.agents.retrieve(specialist_id)
         # Avoid duplicate attachment on re-run
         already_attached = any(
-            s.get("skill_id") == skill_id for s in (current.skills or [])
+            getattr(s, "skill_id", None) == skill_id for s in (current.skills or [])
         )
         if already_attached:
-            print(f"  already attached ✓ (skipping)")
+            print(f"  already attached (skipping)")
             continue
 
         new_skills = list(current.skills or []) + [
@@ -91,7 +105,7 @@ def main() -> None:
             version=current.version,
             skills=new_skills,
         )
-        print(f"  attached ✓")
+        print(f"  attached")
 
     Path(".skill_ids.json").write_text(json.dumps(uploaded, indent=2))
     print(f"\nUploaded {len(uploaded)} skills and attached them to specialists.")

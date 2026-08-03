@@ -1,15 +1,17 @@
 """
-Stretch: add a Critic sub-agent to the coordinator's roster.
+Create the Deal Desk Critic sub-agent and wire it into the coordinator.
 
-The critic's job is to review the coordinator's draft before it goes out.
-It must produce one of three verdicts:
-- "ship it" (with a brief why)
-- "revise" (with specific revisions)
-- "stop" (with reason — e.g., we shouldn't pursue this deal)
+Promoted from stretch to core (hackathon-prd.md §6): the Critic gates every
+draft with a weighted rubric before a document is produced — responsiveness,
+differentiation, technical credibility, commercial coherence, risk posture —
+plus Red/Amber/Green per proposal section, an enumerated coverage-gap list,
+and an enumerated open-assumptions list. The rubric itself lives in the
+`solution-review` skill (attached by upload_skills.py), not here, so it
+isn't hardcoded in two places.
 
-This script creates the critic agent and updates the coordinator's roster
-to include it. Then update the coordinator's system prompt to "always
-consult the Critic on the draft before finalising."
+This script creates the critic agent, updates the coordinator's roster to
+include it, and appends the review procedure (including the hard-block-on-
+Red rule) to the coordinator's system prompt.
 
 Usage:
     python stretch_critic_subagent.py
@@ -20,6 +22,11 @@ import os
 from pathlib import Path
 
 from anthropic import Anthropic
+from dotenv import load_dotenv
+
+from contracts import CRITIC_REVIEW_TOOL
+
+load_dotenv()
 
 
 CRITIC_SYSTEM = """\
@@ -28,19 +35,30 @@ You are the Deal Desk Critic. You don't write proposals. You review them.
 When the coordinator asks for your review, you'll receive:
 - The draft proposal
 - The RFP (for context)
+- The Requirements Register the coordinator worked from
 
-Your job: deliver one of three verdicts.
+The solution-review skill is your rubric. Use it exactly as written — five
+weighted dimensions scored 1-5, Red/Amber/Green per proposal section (worst
+governing dimension, not an average), the gap-enumeration method, and the
+open-assumption-enumeration method. Don't improvise a different scoring
+scheme.
 
-1. **SHIP IT** — the proposal is solid, with at most cosmetic suggestions.
-2. **REVISE** — specific issues that need fixing. List them tersely. No more
-   than 5 issues; if there are more, the proposal isn't ready.
-3. **STOP** — we shouldn't pursue this deal. Reasons might include: terms
-   we can't deliver, mismatched scale, regulatory issues, strategic conflict.
+Call `return_review` once per review round with:
+- `dimension_scores` — all five, 1-5
+- `section_ratings` — Red/Amber/Green per section, with a terse reason each
+- `missing_requirements` — exact requirement_ids the draft doesn't cover
+- `open_assumptions` — material assumptions pulled from specialist findings
+- `verdict` — SHIP_IT / REVISE / STOP
 
 Be sceptical. Your value to the coordinator is that you push back. A senior
-partner who never gets pushback gets sloppy.
+partner who never gets pushback gets sloppy. On REVISE, list issues tersely —
+no more than 5; if there are more, the draft isn't ready and the verdict
+should be STOP instead.
 
-Lead your reply with: VERDICT: SHIP IT / REVISE / STOP.
+Any single Red section is a hard block on SHIP_IT. You may only return
+SHIP_IT alongside a Red section if the coordinator's message to you states
+an explicit human override — in that case set `override_reason` to what was
+overridden and why. Never grant an override yourself.
 """
 
 
@@ -62,7 +80,7 @@ def main() -> None:
         name="Deal Desk Critic",
         model="claude-opus-4-7",  # The critic needs to be sharp
         system=CRITIC_SYSTEM,
-        tools=[{"type": "agent_toolset_20260401"}],
+        tools=[{"type": "agent_toolset_20260401"}, CRITIC_REVIEW_TOOL],
         metadata={
             "hackathon": "partner-basecamp-2026",
             "track": "specialist-swarm",
@@ -84,14 +102,22 @@ def main() -> None:
     # Append critic guidance to the coordinator's system prompt
     new_system = coordinator.system + (
         "\n\n# Critic\n\n"
-        "Before producing the final document, send your draft to the Deal "
-        "Desk Critic. The Critic will reply with one of: SHIP IT, REVISE, "
-        "or STOP.\n"
-        "- If SHIP IT: produce the final docx.\n"
-        "- If REVISE: address the issues and re-submit to the Critic. "
-        "Repeat at most twice.\n"
-        "- If STOP: report to the user with the Critic's reasoning. Do "
-        "NOT produce the final docx.\n"
+        "Before producing the final documents, send your draft, the RFP, and "
+        "the Requirements Register to the Deal Desk Critic. The Critic "
+        "replies via return_review with dimension scores, a Red/Amber/Green "
+        "rating per section, missing requirement IDs, open assumptions, and "
+        "a verdict of SHIP_IT, REVISE, or STOP.\n\n"
+        "- If SHIP_IT with no Red sections: produce the final docx and pptx.\n"
+        "- If REVISE: address every listed issue and every missing "
+        "requirement, then re-submit. Repeat at most twice; if still not "
+        "SHIP_IT after two rounds, treat it as STOP.\n"
+        "- If STOP, or if SHIP_IT but any section is Red: do NOT produce the "
+        "documents. Report the Red section(s) and reasons to the user and "
+        "ask whether to override. Only proceed to document generation on an "
+        "explicit override instruction from the user — and when you do, "
+        "add an \"Open Items\" section to the final document listing exactly "
+        "what was overridden and why, verbatim from the Critic's "
+        "override_reason.\n"
     )
 
     client.beta.agents.update(
@@ -101,8 +127,8 @@ def main() -> None:
         multiagent={"type": "coordinator", "agents": new_roster},
     )
 
-    print(f"Coordinator roster updated. Now includes critic.")
-    print("Re-run run_deal_desk.py to see the critic in action.")
+    print("Coordinator roster updated. Now includes critic.")
+    print("Next: python upload_skills.py (attaches solution-review to the critic)")
 
 
 if __name__ == "__main__":

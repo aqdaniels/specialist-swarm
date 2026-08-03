@@ -21,6 +21,9 @@ import os
 from pathlib import Path
 
 from anthropic import Anthropic
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from contracts import RETURN_FINDINGS_TOOL
 

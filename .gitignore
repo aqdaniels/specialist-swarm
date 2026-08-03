@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.pyc
+.coordinator_id
+.environment_id
+.last_session_id
+.specialist_ids.json
+.skill_ids.json
+outputs/
+coordinator-dispatch.json
+deal-desk-dispatch.json
+reconciled-responses.json
+reconciliation-template.json
