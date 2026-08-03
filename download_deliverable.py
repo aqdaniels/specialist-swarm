@@ -14,6 +14,12 @@ import sys
 from pathlib import Path
 
 from anthropic import Anthropic
+from dotenv import load_dotenv
+
+load_dotenv()
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 
 OUTPUT_DIR = Path("outputs")

@@ -170,6 +170,11 @@
             opacity: 0.7;
         }
 
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
         /* ===== MAIN CONTENT ===== */
         .main {
             display: flex;
@@ -612,28 +617,28 @@
                 <div class="sidebar-subtitle">Proposal Orchestration</div>
             </div>
 
-            <div class="pipeline-stages">
-                <div class="stage active">
+            <div class="pipeline-stages" id="pipelineStages">
+                <div class="stage" data-stage="brief">
                     <div class="stage-number">Stage 1</div>
-                    <div class="stage-name">Classify</div>
-                    <div class="stage-status">✓ Complete</div>
+                    <div class="stage-name">Read &amp; Brief</div>
+                    <div class="stage-status">⊘ Pending</div>
                 </div>
-                <div class="stage active">
+                <div class="stage" data-stage="dispatch">
                     <div class="stage-number">Stage 2</div>
                     <div class="stage-name">Dispatch</div>
-                    <div class="stage-status">⊙ In Progress</div>
+                    <div class="stage-status">⊘ Pending</div>
                 </div>
-                <div class="stage">
+                <div class="stage" data-stage="reconcile">
                     <div class="stage-number">Stage 3</div>
                     <div class="stage-name">Reconcile</div>
                     <div class="stage-status">⊘ Pending</div>
                 </div>
-                <div class="stage">
+                <div class="stage" data-stage="critique">
                     <div class="stage-number">Stage 4</div>
                     <div class="stage-name">Critique</div>
                     <div class="stage-status">⊘ Pending</div>
                 </div>
-                <div class="stage">
+                <div class="stage" data-stage="output">
                     <div class="stage-number">Stage 5</div>
                     <div class="stage-name">Output</div>
                     <div class="stage-status">⊘ Pending</div>
@@ -657,6 +662,30 @@
 
             <!-- CONTENT -->
             <div class="content">
+                <!-- LIVE SWARM DEMO -->
+                <div style="margin-bottom: 24px; padding: 16px; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-bg-card);">
+                    <h2 class="section-title" style="margin-top:0">Live Swarm Demo</h2>
+
+                    <input id="rfpSearch" type="text" placeholder="Search RFPs by name..."
+                        oninput="renderRfpList()"
+                        style="width:100%; box-sizing:border-box; padding:8px; margin-bottom:10px; border-radius:6px; border:1px solid var(--color-border); background:var(--color-bg); color:inherit;">
+
+                    <div id="rfpList" style="display:grid; gap:8px; max-height:220px; overflow-y:auto; margin-bottom:10px;"></div>
+
+                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                        <button class="btn-primary" id="runSwarmBtn" onclick="runSwarm()" disabled>Run Swarm</button>
+                        <span id="runStatus" style="color: var(--color-neutral);">Select an RFP above</span>
+                        <span id="runTimer" style="color: var(--color-neutral-light); font-family:var(--font-family-mono); font-size:12px;"></span>
+                    </div>
+
+                    <div id="stepBanner" style="display:none; margin-top:12px; padding:10px 12px; border-radius:6px; background:var(--color-bg); border:1px solid var(--color-border); font-weight:600; font-size:13px; color:var(--color-primary);"></div>
+
+                    <div id="specialistBoard" style="display:none; margin-top:10px; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px;"></div>
+
+                    <div id="liveLog" style="margin-top:12px; max-height:320px; overflow-y:auto; background:var(--color-bg); border:1px solid var(--color-border); border-radius:6px; padding:10px; font-family:var(--font-family-mono); font-size:12px; white-space:pre-wrap; display:none;"></div>
+                    <div id="liveOutputs" style="margin-top:10px;"></div>
+                </div>
+
                 <!-- METRICS -->
                 <div class="metrics-grid">
                     <div class="metric-card">
@@ -715,141 +744,11 @@
                     </div>
                 </div>
 
-                <!-- REQUIREMENT CARDS -->
+                <!-- REQUIREMENT CARDS (populated live from coordinator-dispatch.json) -->
                 <div>
                     <h2 class="section-title">Requirements Under Review</h2>
-                    <div class="requirements-grid">
-                        <!-- REQ-001 -->
-                        <div class="req-card" onclick="openDetail(this)">
-                            <div class="req-card-header">
-                                <div class="req-id">REQ-001</div>
-                                <div class="req-motion-badge motion-consulting">Consulting</div>
-                            </div>
-                            <div class="req-card-body">
-                                <div class="req-title">Digital Transformation Strategy & Roadmap</div>
-                                <div class="req-mandatory">Mandatory</div>
-                                <div class="req-stats">
-                                    <div class="stat">
-                                        <span class="stat-label">Responses</span>
-                                        <span class="stat-value">3 / 5</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Confidence</span>
-                                        <span class="stat-value">High</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- REQ-002 -->
-                        <div class="req-card" onclick="openDetail(this)">
-                            <div class="req-card-header">
-                                <div class="req-id">REQ-002</div>
-                                <div class="req-motion-badge motion-consulting">Consulting</div>
-                            </div>
-                            <div class="req-card-body">
-                                <div class="req-title">Vendor Ecosystem & Platform Selection</div>
-                                <div class="req-mandatory">Mandatory</div>
-                                <div class="req-stats">
-                                    <div class="stat">
-                                        <span class="stat-label">Responses</span>
-                                        <span class="stat-value">0 / 5</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Status</span>
-                                        <span class="stat-value">Pending</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- REQ-003 -->
-                        <div class="req-card" onclick="openDetail(this)">
-                            <div class="req-card-header">
-                                <div class="req-id">REQ-003</div>
-                                <div class="req-motion-badge motion-build">Build</div>
-                            </div>
-                            <div class="req-card-body">
-                                <div class="req-title">Build vs. Buy Assessment for Core Domains</div>
-                                <div class="req-mandatory">Mandatory</div>
-                                <div class="req-stats">
-                                    <div class="stat">
-                                        <span class="stat-label">Responses</span>
-                                        <span class="stat-value">0 / 5</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Status</span>
-                                        <span class="stat-value">Pending</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- REQ-004 -->
-                        <div class="req-card" onclick="openDetail(this)">
-                            <div class="req-card-header">
-                                <div class="req-id">REQ-004</div>
-                                <div class="req-motion-badge motion-build">Build</div>
-                            </div>
-                            <div class="req-card-body">
-                                <div class="req-title">New Microservices Platform Architecture</div>
-                                <div class="req-mandatory conditional">Conditional</div>
-                                <div class="req-stats">
-                                    <div class="stat">
-                                        <span class="stat-label">Responses</span>
-                                        <span class="stat-value">0 / 5</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Status</span>
-                                        <span class="stat-value">Pending</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- REQ-007 -->
-                        <div class="req-card" onclick="openDetail(this)">
-                            <div class="req-card-header">
-                                <div class="req-id">REQ-007</div>
-                                <div class="req-motion-badge motion-run">Run</div>
-                            </div>
-                            <div class="req-card-body">
-                                <div class="req-title">Managed Cloud Operations Center (24x5 coverage)</div>
-                                <div class="req-mandatory">Mandatory</div>
-                                <div class="req-stats">
-                                    <div class="stat">
-                                        <span class="stat-label">Responses</span>
-                                        <span class="stat-value">0 / 5</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Status</span>
-                                        <span class="stat-value">Pending</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- REQ-011 -->
-                        <div class="req-card" onclick="openDetail(this)">
-                            <div class="req-card-header">
-                                <div class="req-id">REQ-011</div>
-                                <div class="req-motion-badge motion-risk">Risk</div>
-                            </div>
-                            <div class="req-card-body">
-                                <div class="req-title">Liability & Indemnification</div>
-                                <div class="req-mandatory">Mandatory</div>
-                                <div class="req-stats">
-                                    <div class="stat">
-                                        <span class="stat-label">Responses</span>
-                                        <span class="stat-value">0 / 5</span>
-                                    </div>
-                                    <div class="stat">
-                                        <span class="stat-label">Status</span>
-                                        <span class="stat-value">Pending</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="requirements-grid" id="requirementsGrid">
+                        <div style="opacity:0.6">Loading live backend data...</div>
                     </div>
                 </div>
             </div>
@@ -864,6 +763,17 @@
         </div>
         <div class="detail-content">
             <div id="detailResponses"></div>
+        </div>
+    </div>
+
+    <!-- DOCUMENT PREVIEW MODAL -->
+    <div id="docModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;" onclick="if(event.target===this) closeDocPreview()">
+        <div style="background:var(--color-bg-card); width:90%; max-width:900px; height:88vh; border-radius:8px; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid var(--color-border);">
+                <strong id="docModalTitle"></strong>
+                <button class="detail-close" onclick="closeDocPreview()">✕</button>
+            </div>
+            <iframe id="docModalFrame" style="flex:1; border:0; background:#fff;"></iframe>
         </div>
     </div>
 
@@ -888,44 +798,73 @@
             themeToggle.textContent = newTheme === 'dark' ? '☀️ Light' : '🌙 Dark';
         });
 
-        // Mock data for detail panel
-        const detailData = {
-            'REQ-001': {
-                title: 'Digital Transformation Strategy & Roadmap',
-                responses: [
-                    {
-                        specialist: 'Consulting',
-                        finding: 'Our consulting methodology covers enterprise transformation roadmapping with phased migration planning.',
-                        confidence: 'High',
-                        gaps: ['Custom ML pipeline roadmap requires specialist input from data science team']
-                    },
-                    {
-                        specialist: 'Commercial',
-                        finding: '24-month engagement, quarterly steering alignment gates are standard in our SOW.',
-                        confidence: 'High',
-                        gaps: []
-                    },
-                    {
-                        specialist: 'Risk',
-                        finding: 'Roadmap must address compliance constraints per Gramm-Leach-Bliley Act.',
-                        confidence: 'Medium',
-                        gaps: ['Detailed GLBA-specific architecture constraints not provided in RFP']
-                    }
-                ]
+        // Live data, fetched from the actual backend output (no mocks)
+        let reqMap = {};
+
+        async function loadBackendData() {
+            const grid = document.getElementById('requirementsGrid');
+            let dispatch, reconciled;
+            try {
+                dispatch = await fetch('coordinator-dispatch.json').then(r => r.json());
+            } catch (e) {
+                grid.innerHTML = `<div style="color:var(--color-critical)">Could not load coordinator-dispatch.json — run create_coordinator.py / run_deal_desk.py first.</div>`;
+                return;
             }
-        };
+            try {
+                reconciled = await fetch('reconciled-responses.json').then(r => r.json());
+            } catch (e) {
+                reconciled = { merged_by_requirement: [] };
+            }
 
-        function openDetail(card) {
-            const reqId = card.querySelector('.req-id').textContent;
-            const data = detailData[reqId];
+            const reconciledById = {};
+            for (const r of reconciled.merged_by_requirement || []) {
+                reconciledById[r.requirement_id] = r.specialist_inputs;
+            }
 
+            const summary = dispatch.coordinator_summary;
+            document.querySelector('.header-subtitle').textContent =
+                `Agent Charles | ${summary.total_requirements} requirements • ${summary.total_specialist_assignments} specialist assignments • live backend data`;
+
+            grid.innerHTML = '';
+            for (const a of dispatch.analyses) {
+                const responses = reconciledById[a.requirement_id] || null;
+                reqMap[a.requirement_id] = { title: a.title, specialists: a.all_specialists, responses };
+
+                const card = document.createElement('div');
+                card.className = 'req-card';
+                card.onclick = () => openDetail(a.requirement_id);
+                card.innerHTML = `
+                    <div class="req-card-header">
+                        <div class="req-id">${a.requirement_id}</div>
+                        <div class="req-motion-badge motion-${a.motion_type.toLowerCase()}">${a.motion_type}</div>
+                    </div>
+                    <div class="req-card-body">
+                        <div class="req-title">${a.title}</div>
+                        <div class="req-stats">
+                            <div class="stat">
+                                <span class="stat-label">Specialists</span>
+                                <span class="stat-value">${a.all_specialists.join(', ')}</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Status</span>
+                                <span class="stat-value">${responses ? 'Responses in' : 'Pending'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+        }
+
+        function openDetail(reqId) {
+            const data = reqMap[reqId];
             if (!data) return;
 
-            document.getElementById('detailTitle').textContent = data.title;
+            document.getElementById('detailTitle').textContent = `${reqId} — ${data.title}`;
 
-            let responsesHtml = '';
-            for (const response of data.responses) {
-                responsesHtml += `
+            let responsesHtml;
+            if (data.responses) {
+                responsesHtml = data.responses.map(response => `
                     <div class="response-item">
                         <div class="response-specialist">${response.specialist}</div>
                         <div class="response-finding">${response.finding}</div>
@@ -937,13 +876,13 @@
                         ${response.gaps.length > 0 ? `
                             <div class="gaps-list">
                                 <strong>Gaps:</strong>
-                                <ul>
-                                    ${response.gaps.map(gap => `<li>${gap}</li>`).join('')}
-                                </ul>
+                                <ul>${response.gaps.map(gap => `<li>${gap}</li>`).join('')}</ul>
                             </div>
                         ` : ''}
                     </div>
-                `;
+                `).join('');
+            } else {
+                responsesHtml = `<div class="response-item">Awaiting responses from: ${data.specialists.join(', ')}</div>`;
             }
 
             document.getElementById('detailResponses').innerHTML = responsesHtml;
@@ -954,9 +893,248 @@
             document.getElementById('detailPanel').classList.remove('open');
         }
 
-        // Close detail panel on Escape
+        loadBackendData();
+
+        // Live swarm demo
+        const AGENT_COLORS = {
+            'Deal Desk Senior Partner': '#1e3a5f',
+            'Deal Desk Critic': '#ef4444',
+        };
+
+        const SPECIALISTS = ['Build Specialist', 'Run Specialist', 'Consulting Specialist', 'Commercial Specialist', 'Risk & Compliance Specialist'];
+        const STAGE_ORDER = ['brief', 'dispatch', 'reconcile', 'critique', 'output'];
+        let repliedSpecialists, criticRounds, criticSpawned, runStartTime, timerInterval;
+
+        function resetRunState() {
+            repliedSpecialists = new Set();
+            criticRounds = 0;
+            criticSpawned = false;
+        }
+
+        function renderSpecialistBoard() {
+            const board = document.getElementById('specialistBoard');
+            board.style.display = 'grid';
+            board.innerHTML = SPECIALISTS.map(name => `
+                <div id="chip-${cssId(name)}" style="padding:8px 10px; border-radius:6px; border:1px solid var(--color-border); background:var(--color-bg); font-size:12px; display:flex; align-items:center; gap:6px;">
+                    <span class="chip-dot" style="width:8px; height:8px; border-radius:50%; background:var(--color-neutral-light); flex-shrink:0;"></span>
+                    <span>${name}</span>
+                </div>
+            `).join('');
+        }
+
+        function cssId(name) {
+            return name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        }
+
+        function setChipState(name, state) {
+            const chip = document.getElementById(`chip-${cssId(name)}`);
+            if (!chip) return;
+            const dot = chip.querySelector('.chip-dot');
+            const colors = { running: '#f59e0b', done: '#10b981', pending: 'var(--color-neutral-light)' };
+            dot.style.background = colors[state] || colors.pending;
+            if (state === 'running') dot.style.animation = 'pulse 1s ease-in-out infinite';
+            else dot.style.animation = '';
+        }
+
+        function ensureCriticChip() {
+            if (criticSpawned) return;
+            criticSpawned = true;
+            const board = document.getElementById('specialistBoard');
+            board.insertAdjacentHTML('beforeend', `
+                <div id="chip-${cssId('Deal Desk Critic')}" style="padding:8px 10px; border-radius:6px; border:1px solid var(--color-border); background:var(--color-bg); font-size:12px; display:flex; align-items:center; gap:6px;">
+                    <span class="chip-dot" style="width:8px; height:8px; border-radius:50%; background:var(--color-neutral-light); flex-shrink:0;"></span>
+                    <span>Deal Desk Critic</span>
+                </div>
+            `);
+        }
+
+        function setStage(index, label) {
+            STAGE_ORDER.forEach((key, i) => {
+                const el = document.querySelector(`.stage[data-stage="${key}"]`);
+                const statusEl = el.querySelector('.stage-status');
+                el.classList.remove('active');
+                if (i < index) { el.classList.add('active'); statusEl.textContent = '✓ Complete'; }
+                else if (i === index) { el.classList.add('active'); statusEl.textContent = '⊙ In Progress'; }
+                else { statusEl.textContent = '⊘ Pending'; }
+            });
+            const banner = document.getElementById('stepBanner');
+            banner.style.display = 'block';
+            banner.textContent = label;
+        }
+
+        function startTimer() {
+            runStartTime = Date.now();
+            const timer = document.getElementById('runTimer');
+            timerInterval = setInterval(() => {
+                const s = Math.floor((Date.now() - runStartTime) / 1000);
+                timer.textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function openDocPreview(filename) {
+            document.getElementById('docModalTitle').textContent = filename;
+            document.getElementById('docModalFrame').src = `/view/${encodeURIComponent(filename)}`;
+            document.getElementById('docModal').style.display = 'flex';
+        }
+
+        function closeDocPreview() {
+            document.getElementById('docModal').style.display = 'none';
+            document.getElementById('docModalFrame').src = '';
+        }
+
+        function logLine(text, color) {
+            const log = document.getElementById('liveLog');
+            log.style.display = 'block';
+            const line = document.createElement('div');
+            if (color) line.style.color = color;
+            line.textContent = text;
+            log.appendChild(line);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        let allRfps = [];
+        let selectedRfpId = null;
+
+        async function loadRfpOptions() {
+            allRfps = await fetch('/api/rfps').then(r => r.json());
+            renderRfpList();
+        }
+        loadRfpOptions();
+
+        function selectRfp(id) {
+            selectedRfpId = id;
+            renderRfpList();
+            document.getElementById('runSwarmBtn').disabled = false;
+            document.getElementById('runStatus').textContent = `Selected: ${allRfps.find(r => r.id === id).label}`;
+        }
+
+        function renderRfpList() {
+            const query = document.getElementById('rfpSearch').value.toLowerCase();
+            const list = document.getElementById('rfpList');
+            const filtered = allRfps.filter(r =>
+                r.label.toLowerCase().includes(query) || r.description.toLowerCase().includes(query)
+            );
+            list.innerHTML = filtered.map(r => `
+                <div onclick="selectRfp('${r.id}')" style="cursor:pointer; padding:10px 12px; border-radius:6px; border:1px solid ${r.id === selectedRfpId ? 'var(--color-primary)' : 'var(--color-border)'}; background:${r.id === selectedRfpId ? 'var(--color-bg)' : 'var(--color-bg-card)'};">
+                    <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                        <strong>${r.label}</strong>
+                        <span style="font-size:11px; color:var(--color-neutral-light); text-transform:uppercase;">${r.type} · ${r.size_kb} KB</span>
+                    </div>
+                    <div style="font-size:12px; color:var(--color-neutral); margin-top:2px;">${r.description}</div>
+                </div>
+            `).join('') || `<div style="color:var(--color-neutral); padding:8px;">No RFPs match "${query}"</div>`;
+        }
+
+        function runSwarm() {
+            const rfp = selectedRfpId;
+            if (!rfp) return;
+            const btn = document.getElementById('runSwarmBtn');
+            const status = document.getElementById('runStatus');
+            const log = document.getElementById('liveLog');
+            const outputs = document.getElementById('liveOutputs');
+
+            btn.disabled = true;
+            status.textContent = 'Running — this calls the real API, may take a few minutes...';
+            log.textContent = '';
+            outputs.innerHTML = '';
+            resetRunState();
+            renderSpecialistBoard();
+            setStage(0, 'Step 1 of 5 — Reading the RFP and briefing specialists');
+            startTimer();
+
+            const source = new EventSource(`/api/run?rfp=${encodeURIComponent(rfp)}`);
+
+            source.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                switch (data.type) {
+                    case 'session_started':
+                        logLine(`[session started] ${data.session_id}`);
+                        break;
+                    case 'thread_spawned':
+                        logLine(`[thread spawned]   ${data.agent}`, AGENT_COLORS[data.agent] || '#3b82f6');
+                        if (data.agent === 'Deal Desk Critic') ensureCriticChip();
+                        break;
+                    case 'thread_running':
+                        logLine(`[thread running]   ${data.agent}`);
+                        if (SPECIALISTS.includes(data.agent)) {
+                            setChipState(data.agent, 'running');
+                            setStage(1, `Step 2 of 5 — Specialists working in parallel (${repliedSpecialists.size}/${SPECIALISTS.length} replied)`);
+                        } else if (data.agent === 'Deal Desk Critic') {
+                            setChipState('Deal Desk Critic', 'running');
+                        }
+                        break;
+                    case 'delegate':
+                        logLine(`[delegate ->]      ${data.agent}`);
+                        if (data.agent === 'Deal Desk Critic') {
+                            ensureCriticChip();
+                            criticRounds += 1;
+                            setStage(3, `Step 4 of 5 — Critic reviewing (round ${criticRounds})`);
+                        }
+                        break;
+                    case 'reply':
+                        logLine(`[reply <-]         ${data.agent}`, '#10b981');
+                        if (SPECIALISTS.includes(data.agent)) {
+                            repliedSpecialists.add(data.agent);
+                            setChipState(data.agent, 'done');
+                            if (repliedSpecialists.size === SPECIALISTS.length) {
+                                setStage(2, 'Step 3 of 5 — Senior Partner synthesizing the draft');
+                            } else {
+                                setStage(1, `Step 2 of 5 — Specialists working in parallel (${repliedSpecialists.size}/${SPECIALISTS.length} replied)`);
+                            }
+                        } else if (data.agent === 'Deal Desk Critic') {
+                            setChipState('Deal Desk Critic', 'done');
+                            setStage(4, 'Step 5 of 5 — Finalizing branded docx & pptx');
+                        }
+                        break;
+                    case 'tool_use':
+                        logLine(`[tool: ${data.name}]`, '#9ca3af');
+                        break;
+                    case 'reconnecting':
+                        logLine(`[reconnecting to session... attempt ${data.attempt}]`, '#f59e0b');
+                        break;
+                    case 'text':
+                        logLine(data.text);
+                        break;
+                    case 'done':
+                        logLine(`[swarm finished] session ${data.session_id}`, '#10b981');
+                        status.textContent = 'Done.';
+                        btn.disabled = false;
+                        stopTimer();
+                        setStage(5, 'Complete — deliverables ready below');
+                        outputs.innerHTML = data.files.map(f => {
+                            const dl = `<a href="/outputs/${encodeURIComponent(f)}" target="_blank" class="btn-secondary" style="margin-right:8px; text-decoration:none;">⬇ Download</a>`;
+                            const view = f.toLowerCase().endsWith('.docx')
+                                ? `<button class="btn-secondary" onclick="openDocPreview(${JSON.stringify(f)})" style="margin-right:8px;">👁 View</button>`
+                                : '';
+                            return `<div style="margin-bottom:8px; display:flex; align-items:center; gap:4px;"><span style="margin-right:8px;">${f}</span>${view}${dl}</div>`;
+                        }).join('');
+                        source.close();
+                        break;
+                    case 'error':
+                        logLine(`[error] ${data.text}`, '#ef4444');
+                        status.textContent = 'Error.';
+                        btn.disabled = false;
+                        stopTimer();
+                        source.close();
+                        break;
+                }
+            };
+
+            source.onerror = () => {
+                status.textContent = 'Connection closed.';
+                btn.disabled = false;
+                stopTimer();
+                source.close();
+            };
+        }
+
+        // Close detail panel / doc preview on Escape
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeDetail();
+            if (e.key === 'Escape') { closeDetail(); closeDocPreview(); }
         });
     </script>
 </body>
